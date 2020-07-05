@@ -1,7 +1,7 @@
 import pymongo
 from bson import ObjectId
 from pymongo.results import InsertOneResult
-
+from Tblock import PlaceBlock, Block_core
 from auth import MongoClientURL
 
 client = pymongo.MongoClient(MongoClientURL)
@@ -13,16 +13,15 @@ class db_query(object):
         self.mydb = client["travelHunt"]
         self.mycol = self.mydb[col]
 
-    def new_unit(self, owner:str, steps:list):
+    def new_unit(self, owner:str, steps:[Block_core]):
         # auto generate id column called "_id"
         mydict = { "owner": owner, "steps": steps}
         query: InsertOneResult = self.mycol.insert_one(mydict)
         return query.inserted_id
 
-    def new_place(self, tag_id: str, pic_urls: list, tag_name: str, spend_time):
+    def new_place(self, place_dict: PlaceBlock):
         # auto generate id column called "_id"
-        mydict = {"tag_id": tag_id, "pic_urls": pic_urls, "tag_name": tag_name, "spend_time": spend_time}
-        query: InsertOneResult = self.mycol.insert_one(mydict)
+        query: InsertOneResult = self.mycol.insert_one(place_dict)
         return query.inserted_id
 
     ###
